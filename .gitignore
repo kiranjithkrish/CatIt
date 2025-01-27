@@ -1,0 +1,20 @@
+#Ignore .xcodeproj initially
+CatIt.xcodeproj/
+# Build and Derived Data
+build/
+DerivedData/
+# User-specific files
+*.xcuserdata
+*.xcuserstate
+# Scheme management
+xcuserdata/
+*.xcscheme
+!default.xcscheme
+# Build artifacts
+build/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+# macOS Files
+.DS_Store
