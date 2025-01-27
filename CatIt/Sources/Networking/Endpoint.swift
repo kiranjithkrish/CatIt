@@ -34,7 +34,7 @@ struct Endpoint {
 		case none
 		case bearer
 		case basic(username: String, password: String)
-		case custom(String)
+		case custom(apiKey: String)
 	}
 	
 	enum Encoding {
@@ -44,6 +44,7 @@ struct Endpoint {
 	let baseUrl: URL
 	let path: String
 	let parameters: Body
+	//Automatic string conversion using the description property.
 	let queryParams: [String: CustomStringConvertible]?
 	let httpMethod: HTTPMethod
 	let headers: [String: String]?
