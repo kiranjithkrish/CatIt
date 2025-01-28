@@ -9,11 +9,16 @@ import Foundation
 
 protocol RESTDataStore: AnyObject {
 	func request(for endpoint: EndpointConvertible) throws -> URLRequest
-	func getCodable<Result: Decodable>(at endpoint: CodableEndpoint<Result>)async throws -> Result where Result: Decodable
+	func getCodable<Result: Decodable>(at endpoint: CodableEndpoint<Result>) async throws -> Result
+}
+
+extension RESTDataStore {
+	func getCodable<Result: Decodable>(at endpoint: EndpointConvertible) async throws -> Result {
+		try await getCodable(at: CodableEndpoint<Result>(endpoint: endpoint.endpoint))
+	}
 }
 
 final class DefaultRESTDataStore: RESTDataStore {
-	
 	
 	private let session: URLSession
 	

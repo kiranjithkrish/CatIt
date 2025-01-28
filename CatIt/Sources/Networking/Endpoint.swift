@@ -15,7 +15,7 @@ protocol Body {
 
 extension Body where Self: Encodable {
 	var json: JSON? {
-		nil
+		nil // To be handled later if post is needed
 	}
 }
 

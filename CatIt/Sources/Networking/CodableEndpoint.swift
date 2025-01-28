@@ -7,11 +7,12 @@
 
 import Foundation
 
-struct CodableEndpoint<Entity: Decodable>: EndpointConvertible {
+public struct CodableEndpoint<Entity: Decodable>: EndpointConvertible {
 	let decoder: JSONDecoder
 	let endpoint: Endpoint
 	
-	init(_ decoder: JSONDecoder = .init(), _ endpoint: Endpoint) {
+	init(decoder: JSONDecoder = .init(),
+		 endpoint: Endpoint) {
 		self.decoder = decoder
 		self.endpoint = endpoint
 	}
