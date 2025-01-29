@@ -9,7 +9,6 @@ import Foundation
 
 protocol BreedsRepository {
 	func breeds() async throws -> [Breed]
-	func breedDetail() async throws -> Breed
 }
 
 
@@ -23,7 +22,7 @@ struct DefaultBreedsRepository: BreedsRepository {
 					baseUrl: URL(string: "https://api.thecatapi.com/")!,
 					path: "v1/breeds",
 					httpMethod: .get,
-					authorisation: .custom(apiKey: "live_WCeRxR4cQXW5mKDvMPB9pHNoBYDoyix65jFLHGgQc5we6JpPYLVC3gWz0vv0IK89")
+					authorisation: .custom(apiKey: "x-api-key", value: "live_WCeRxR4cQXW5mKDvMPB9pHNoBYDoyix65jFLHGgQc5we6JpPYLVC3gWz0vv0IK89")
 				)
 			)
 		}

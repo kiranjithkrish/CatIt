@@ -42,8 +42,8 @@ extension DefaultRESTDataStore {
 	
 	private func setupAuthorisation(headers: inout [String:String], endpoint: Endpoint) throws {
 		switch endpoint.authorisation {
-		case let .custom(apiKey):
-			headers["x-api-key"] = apiKey
+		case let .custom(key,value):
+			headers[key] = value
 		default: throw NetworkingError(code: .httpUnauthorised)
 		}
 	}

@@ -34,7 +34,7 @@ struct Endpoint {
 		case none
 		case bearer
 		case basic(username: String, password: String)
-		case custom(apiKey: String)
+		case custom(apiKey: String, value: String)
 	}
 	
 	enum Encoding {
