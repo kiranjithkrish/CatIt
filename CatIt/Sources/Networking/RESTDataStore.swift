@@ -7,8 +7,9 @@
 
 import Foundation
 
-protocol RESTDataStore: AnyObject {
-	func request(for endpoint: EndpointConvertible) throws -> URLRequest
+
+protocol RESTDataStore: AnyObject, Sendable {
+	func request(for endpoint: EndpointConvertible) async throws -> URLRequest
 	func getCodable<Result: Decodable>(at endpoint: CodableEndpoint<Result>) async throws -> Result
 }
 
@@ -18,19 +19,19 @@ extension RESTDataStore {
 	}
 }
 
-final class DefaultRESTDataStore: RESTDataStore {
+actor DefaultRESTDataStore: RESTDataStore {
 	
-	private let session: URLSession
+	private let session: SessionAdapter
 	
 	init(session: URLSession = .shared) {
 		self.session = session
 	}
 	
-	func request(for endpoint: any EndpointConvertible) throws -> URLRequest {
+	func request(for endpoint: any EndpointConvertible) async throws -> URLRequest {
 		try makeRequest(for: endpoint)
 	}
 	
-	func getCodable<Result>(at endpoint: CodableEndpoint<Result>) async throws -> Result where Result: Decodable {
+	func getCodable<Result: Sendable>(at endpoint: CodableEndpoint<Result>) async throws -> Result where Result: Decodable {
 		let response = try await responseDataTask(for: endpoint)
 		return try response.decode()
 	}

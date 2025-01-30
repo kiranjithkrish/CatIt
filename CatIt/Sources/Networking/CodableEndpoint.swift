@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct CodableEndpoint<Entity: Decodable>: EndpointConvertible {
+public struct CodableEndpoint<Entity: Decodable>: EndpointConvertible, Sendable {
 	let decoder: JSONDecoder
 	let endpoint: Endpoint
 	

@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol BreedsRepository {
+protocol BreedsRepository: Sendable {
 	func breeds() async throws -> [Breed]
 }
 

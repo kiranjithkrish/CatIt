@@ -7,8 +7,9 @@
 
 import Foundation
 
-protocol BreedDetailsRepository {
+protocol BreedDetailsRepository: Sendable {
 	func breedDetail() async throws -> Breed
+	func breedImages() async throws -> [BreedImage]
 }
 
 
@@ -27,6 +28,17 @@ struct DefaultBreedDetailsRepository: BreedDetailsRepository {
 				)
 			)
 		}
+		
+		static func breedImages() -> CodableEndpoint<[BreedImage]> {
+			CodableEndpoint<[BreedImage]>(
+				endpoint: Endpoint(
+					baseUrl: URL(string: "https://api.thecatapi.com/")!,
+					path: "v1/breeds",
+					httpMethod: .get,
+					authorisation: .custom(apiKey: "x-api-key", value: "live_WCeRxR4cQXW5mKDvMPB9pHNoBYDoyix65jFLHGgQc5we6JpPYLVC3gWz0vv0IK89")
+				)
+			)
+		}
 	}
 	
 	init(dataSource: any RESTDataStore) {
@@ -36,6 +48,12 @@ struct DefaultBreedDetailsRepository: BreedDetailsRepository {
 	func breedDetail() async throws -> Breed {
 		let endpoint = Endpoints.breedDetail()
 		let breeds = try await dataSource.getCodable<Breed>(at: endpoint)
+		return breeds
+	}
+	
+	func breedImages() async throws -> [BreedImage] {
+		let endpoint = Endpoints.breedImages()
+		let breeds = try await dataSource.getCodable<[BreedImage]>(at: endpoint)
 		return breeds
 	}
 }

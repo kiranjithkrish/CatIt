@@ -8,7 +8,7 @@
 import Foundation
 
 
-protocol EndpointConvertible {
+protocol EndpointConvertible: Sendable {
 	var endpoint: Endpoint { get }
 }
 

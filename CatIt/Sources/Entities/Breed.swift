@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct Breed: Identifiable, Codable {
+struct Breed: Identifiable, Codable, Sendable {
 	typealias ID = String
 	let id: ID
 	let name: String
