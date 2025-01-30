@@ -11,7 +11,11 @@ import SwiftUI
 struct CatItApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+			let breedsRepo = DefaultBreedsRepository(dataSource: DefaultRESTDataStore())
+			let viewModel = BreedsService(breedsRepo: breedsRepo)
+			let flow = BreedsFlow(selectedBreed: nil)
+			
+			BreedsView(breedsService: viewModel, flow: flow)
         }
     }
 }

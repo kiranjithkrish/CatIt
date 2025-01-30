@@ -92,6 +92,7 @@ extension DefaultRESTDataStore {
 
 private extension DefaultRESTDataStore {
 	func responseDataTask(for endpoint: EndpointConvertible) async throws -> Response {
+		
 		let urlRequest = try makeRequest(for: endpoint)
 		let (data, _) = try await session.data(for: urlRequest)
 		return Response(data: data)
