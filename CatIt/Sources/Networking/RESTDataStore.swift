@@ -60,8 +60,8 @@ extension DefaultRESTDataStore {
 		}
 		
 		// create the path
-		var urlPath = components.path
-		urlPath = "/" + (urlPath + "/" + endpoint.path)
+		let urlPath = components.path
+		components.path = "/" + (urlPath + "/" + endpoint.path)
 			.components(separatedBy: "/")
 			.filter { !$0.isEmpty}
 			.joined(separator: "/")
@@ -92,8 +92,8 @@ extension DefaultRESTDataStore {
 
 private extension DefaultRESTDataStore {
 	func responseDataTask(for endpoint: EndpointConvertible) async throws -> Response {
-		
 		let urlRequest = try makeRequest(for: endpoint)
+		print(urlRequest.url)
 		let (data, _) = try await session.data(for: urlRequest)
 		return Response(data: data)
 	}

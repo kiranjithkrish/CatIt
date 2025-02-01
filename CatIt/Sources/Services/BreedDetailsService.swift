@@ -12,7 +12,7 @@ class BreedDetailsService {
 	private let breedDetailsRepo: BreedDetailsRepository
 	
 	var error: Error?
-	var breedDetails: (Breed, [BreedImage])?
+	var breedDetails: (Breed, [CatImageInfo])?
 	
 	init(breedDetailsRepo: BreedDetailsRepository) {
 		self.breedDetailsRepo = breedDetailsRepo

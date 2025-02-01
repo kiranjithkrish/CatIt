@@ -9,7 +9,7 @@ import Foundation
 
 protocol BreedDetailsRepository: Sendable {
 	func breedDetail() async throws -> Breed
-	func breedImages() async throws -> [BreedImage]
+	func breedImages() async throws -> [CatImageInfo]
 }
 
 
@@ -29,8 +29,8 @@ struct DefaultBreedDetailsRepository: BreedDetailsRepository {
 			)
 		}
 		
-		static func breedImages() -> CodableEndpoint<[BreedImage]> {
-			CodableEndpoint<[BreedImage]>(
+		static func breedImages() -> CodableEndpoint<[CatImageInfo]> {
+			CodableEndpoint<[CatImageInfo]>(
 				endpoint: Endpoint(
 					baseUrl: URL(string: "https://api.thecatapi.com/")!,
 					path: "v1/breeds",
@@ -51,7 +51,7 @@ struct DefaultBreedDetailsRepository: BreedDetailsRepository {
 		return breeds
 	}
 	
-	func breedImages() async throws -> [BreedImage] {
+	func breedImages() async throws -> [CatImageInfo] {
 		let endpoint = Endpoints.breedImages()
 		let breeds = try await dataSource.getCodable<[BreedImage]>(at: endpoint)
 		return breeds

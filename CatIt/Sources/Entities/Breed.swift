@@ -12,7 +12,6 @@ struct Breed: Hashable, Codable, Sendable, Identifiable {
 	typealias ID = String
 	let id: ID
 	let name: String
-	let temperament: String?
 	let origin: String?
 	let description: String?
 }

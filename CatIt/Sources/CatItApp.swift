@@ -12,10 +12,10 @@ struct CatItApp: App {
     var body: some Scene {
         WindowGroup {
 			let breedsRepo = DefaultBreedsRepository(dataSource: DefaultRESTDataStore())
-			let viewModel = BreedsService(breedsRepo: breedsRepo)
+			let imagesService = BreedsService(breedsRepo: breedsRepo)
 			let flow = BreedsFlow(selectedBreed: nil)
 			
-			BreedsView(breedsService: viewModel, flow: flow)
+			BreedsView(breedsService: imagesService)
         }
     }
 }
