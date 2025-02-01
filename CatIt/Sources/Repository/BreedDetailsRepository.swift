@@ -8,8 +8,7 @@
 import Foundation
 
 protocol BreedDetailsRepository: Sendable {
-	func breedDetail() async throws -> Breed
-	func breedImages() async throws -> [CatImageInfo]
+	func breedImages(page: Int, limit: Int, id: String) async throws -> [CatImageInfo]
 }
 
 
@@ -18,23 +17,12 @@ struct DefaultBreedDetailsRepository: BreedDetailsRepository {
 	
 	private enum Endpoints {
 		
-		static func breedDetail() -> CodableEndpoint<Breed> {
-			CodableEndpoint<Breed>(
+		static func breedImages(page: Int, limit: Int, id: String) -> CodableEndpoint<[CatImageInfo]> {
+			CodableEndpoint(
 				endpoint: Endpoint(
 					baseUrl: URL(string: "https://api.thecatapi.com/")!,
-					path: "v1/breeds",
-					httpMethod: .get,
-					authorisation: .custom(apiKey: "x-api-key", value: "live_WCeRxR4cQXW5mKDvMPB9pHNoBYDoyix65jFLHGgQc5we6JpPYLVC3gWz0vv0IK89")
-				)
-			)
-		}
-		
-		static func breedImages() -> CodableEndpoint<[CatImageInfo]> {
-			CodableEndpoint<[CatImageInfo]>(
-				endpoint: Endpoint(
-					baseUrl: URL(string: "https://api.thecatapi.com/")!,
-					path: "v1/breeds",
-					httpMethod: .get,
+					path:  "v1/images/search",
+					queryParams: ["page":page, "limit": limit, "has_breeds": true, "breed_id": id], httpMethod: .get,
 					authorisation: .custom(apiKey: "x-api-key", value: "live_WCeRxR4cQXW5mKDvMPB9pHNoBYDoyix65jFLHGgQc5we6JpPYLVC3gWz0vv0IK89")
 				)
 			)
@@ -45,14 +33,8 @@ struct DefaultBreedDetailsRepository: BreedDetailsRepository {
 		self.dataSource = dataSource
 	}
 	
-	func breedDetail() async throws -> Breed {
-		let endpoint = Endpoints.breedDetail()
-		let breeds = try await dataSource.getCodable<Breed>(at: endpoint)
-		return breeds
-	}
-	
-	func breedImages() async throws -> [CatImageInfo] {
-		let endpoint = Endpoints.breedImages()
+	func breedImages(page: Int, limit: Int, id breedId: String) async throws -> [CatImageInfo] {
+		let endpoint = Endpoints.breedImages(page: page, limit: limit, id: breedId)
 		let breeds = try await dataSource.getCodable<[BreedImage]>(at: endpoint)
 		return breeds
 	}

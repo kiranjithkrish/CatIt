@@ -9,26 +9,39 @@ import SwiftUI
 
 struct BreedsView: View {
 	@StateObject var breedsService: BreedsService
-
+	let flow: RootFlow
+	
     var body: some View {
-		NavigationStack {
 			Group {
-					List(breedsService.catImages) { catInfo in
+				List(breedsService.catImages) { catInfo in
 						if let breed = catInfo.breeds.first {
 							Button(action: {
-								//flow.didSelectBreed(breed)
+								flow.showBreedDetails(for: breed)
 							}) {
 								BreedRowView(imageInfo: catInfo)
+									.onAppear {
+										loadMoreIfNeeded(currentItem: catInfo)
+									}
 							}
 						}
-						
 					}
 			}
 			.task {
 				await breedsService.loadBreeds()
 			}
-		}
+			.navigationTitle("Breeds")
+		
     }
+	
+	private func loadMoreIfNeeded(currentItem: CatImageInfo) {
+		guard let lastItem = breedsService.catImages.last else { return }
+		if lastItem.id == currentItem.id {
+			Task {
+				await breedsService.loadBreeds()
+			}
+		}
+	}
+		
 }
 
 

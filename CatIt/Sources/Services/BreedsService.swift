@@ -21,11 +21,19 @@ final class BreedsService: ObservableObject {
 	@Published var error: Error?
 	@Published var catImages: [CatImageInfo] = [] 
 	@Published var isLoading = false
+	private var hasMore = true
 	
 	@MainActor
 	func loadBreeds() async {
 		do {
-			self.catImages = try await self.breedsRepo.breeds(page: currentPage, limit: pageLimit)
+			let catImages = try await self.breedsRepo.breeds(page: currentPage, limit: pageLimit)
+			if catImages.isEmpty {
+				hasMore = false
+				self.catImages = catImages
+			} else {
+				hasMore = true
+				self.catImages.append(contentsOf: catImages)
+			}
 		} catch {
 			self.error = error
 		}
