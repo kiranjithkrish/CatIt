@@ -9,36 +9,23 @@ import Foundation
 import SwiftUI
 
 protocol RootActions {
-	func didSelectBreed(_ breed: Breed)
-	func didReload()
+	func didSelectBreed(for breed: Breed)
 }
 
-final class RootFlow {
-	let coordinator: NavigationCoordinator
+final class RootFlow: RootActions {
+	
+	private let coordinator: NavigationCoordinator
+	
 	init(coordinator: NavigationCoordinator) {
 		self.coordinator = coordinator
 	}
-	@MainActor func makeBreedsView(breedsService: BreedsService) -> some View {
-		BreedsView(breedsService: breedsService, flow: self)
-	}
 	
-	@MainActor func showBreedDetails(for breed: Breed) {
-			// Assemble the dependencies for the details screen.
+	func didSelectBreed(for breed: Breed) {
 		let dataStore = DefaultRESTDataStore()
 		let repository = DefaultBreedDetailsRepository(dataSource: dataStore)
 		let viewModel = BreedDetailsService(breedDetailsRepo: repository)
 		let detailsView = BreedDetailsView(details: viewModel, breed: breed)
-	
 		coordinator.push({  AnyView(detailsView)  })
 	}
-	
-	@MainActor func makeBreedsView() -> AnyView {
-		let dataStore = DefaultRESTDataStore()
-		let breedsRepo = DefaultBreedsRepository(dataSource: dataStore)
-		let breedsService = BreedsService(breedsRepo: breedsRepo)
-		return AnyView(BreedsView(breedsService: breedsService, flow: self))
-	}
-	
-	
 
 }

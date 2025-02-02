@@ -63,7 +63,7 @@ struct BasicCachedAsyncImage: View {
 		
 		if let cachedResponse = urlCache.cachedResponse(for: request),
 		   let uiImage = UIImage(data: cachedResponse.data) {
-			print("Using cached image")
+			print("Fetching image from cache")
 			let loadedImage = Image(uiImage: uiImage)
 			return loadedImage
 		}

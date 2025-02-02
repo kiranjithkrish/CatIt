@@ -15,7 +15,7 @@ final class BreedsService: ObservableObject {
 		self.breedsRepo = breedsRepo
 	}
 	
-	private let currentPage = 0
+	private var currentPage = 0
 	private let pageLimit = 20
 	
 	@Published var error: Error?
@@ -25,14 +25,14 @@ final class BreedsService: ObservableObject {
 	
 	@MainActor
 	func loadBreeds() async {
+		print("Current page is", self.currentPage)
 		do {
 			let catImages = try await self.breedsRepo.breeds(page: currentPage, limit: pageLimit)
 			if catImages.isEmpty {
 				hasMore = false
-				self.catImages = catImages
 			} else {
-				hasMore = true
 				self.catImages.append(contentsOf: catImages)
+				currentPage += 1
 			}
 		} catch {
 			self.error = error

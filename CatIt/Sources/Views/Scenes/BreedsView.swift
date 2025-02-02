@@ -8,30 +8,62 @@
 import SwiftUI
 
 struct BreedsView: View {
-	@StateObject var breedsService: BreedsService
-	let flow: RootFlow
+	@StateObject private var breedsService: BreedsService
+	let rootFlow: RootFlow
 	
-    var body: some View {
-			Group {
-				List(breedsService.catImages) { catInfo in
-						if let breed = catInfo.breeds.first {
-							Button(action: {
-								flow.showBreedDetails(for: breed)
-							}) {
-								BreedRowView(imageInfo: catInfo)
-									.onAppear {
-										loadMoreIfNeeded(currentItem: catInfo)
-									}
-							}
-						}
-					}
+	init(breedsService: BreedsService, rootFlow: RootFlow) {
+		_breedsService = StateObject(wrappedValue: breedsService)
+		self.rootFlow = rootFlow
+	}
+	
+	var body: some View {
+		Group {
+			if let error = breedsService.error {
+				VStack {
+					Spacer()
+					ErrorToastView(message: "Failed to load the breeds")
+						.transition(.move(edge: .bottom).combined(with: .opacity))
+				}
+				.animation(.easeOut, value: error.localizedDescription)
+			} else if breedsService.catImages.isEmpty {
+				ProgressView()
+			} else {
+				BreedsList(
+					breedData: breedsService.catImages,
+					flow: rootFlow,
+					breedsService: breedsService
+				)
 			}
-			.task {
+		}
+		.task {
+			if breedsService.catImages.isEmpty {
 				await breedsService.loadBreeds()
 			}
-			.navigationTitle("Breeds")
-		
-    }
+		}
+		.navigationTitle("Breeds")
+	}
+}
+
+
+struct BreedsList: View {
+	let breedData: [CatImageInfo]
+	let flow: RootFlow
+	let breedsService: BreedsService
+	
+	var body: some View {
+		List(breedData) { catInfo in
+			if let breed = catInfo.firstBreed {
+				Button(action: {
+					flow.didSelectBreed(for: breed)
+				}) {
+					BreedRowView(imageInfo: catInfo)
+						.onAppear {
+							loadMoreIfNeeded(currentItem: catInfo)
+						}
+				}
+			}
+		}
+	}
 	
 	private func loadMoreIfNeeded(currentItem: CatImageInfo) {
 		guard let lastItem = breedsService.catImages.last else { return }
@@ -41,9 +73,7 @@ struct BreedsView: View {
 			}
 		}
 	}
-		
 }
-
 
 struct BreedRowView: View {
 	let imageInfo: CatImageInfo

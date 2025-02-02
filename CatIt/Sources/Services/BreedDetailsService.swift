@@ -12,7 +12,7 @@ import SwiftUI
 final class BreedDetailsService: ObservableObject {
 	private let breedDetailsRepo: BreedDetailsRepository
 	
-	private let currentPage = 0
+	private var currentPage = 0
 	private let limit = 20
 	private var hasMore = true
 	
@@ -26,14 +26,14 @@ final class BreedDetailsService: ObservableObject {
 	
 	@MainActor
 	func loadBreedDetails(for breed: String) async {
+		print("Current page is", self.currentPage)
 		do {
 			//async let breed = repo.breedDetail()
 			let images = try await self.breedDetailsRepo.breedImages(page: currentPage, limit: limit, id: breed)
 			if images.isEmpty {
 				hasMore = false
-				self.breedImages = images
 			} else {
-				hasMore = true
+				currentPage += 1
 				self.breedImages.append(contentsOf: images)
 			}
 			
