@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BreedsView: View {
+struct BreedsListView: View {
 	@StateObject private var breedsService: BreedsService
 	let rootFlow: RootFlow
 	

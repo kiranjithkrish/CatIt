@@ -5,11 +5,11 @@ struct RootView: View {
 	private let rootFlow: RootFlow
 	@StateObject private var breedsService: BreedsService
 	
-	init() {
-		let navCoordinator = NavigationCoordinator()
-		_coordinator = StateObject(wrappedValue: navCoordinator)
+	init(coordinator: NavigationCoordinator) {
 		
-		self.rootFlow = RootFlow(coordinator: navCoordinator)
+		_coordinator = StateObject(wrappedValue: coordinator)
+		
+		self.rootFlow = RootFlow(coordinator: coordinator)
 	
 		let dataStore = DefaultRESTDataStore()
 		let breedsRepo = DefaultBreedsRepository(dataSource: dataStore)
@@ -18,7 +18,7 @@ struct RootView: View {
 	
 	var body: some View {
 		NavigationStack(path: $coordinator.path) {
-			BreedsView(breedsService: breedsService, rootFlow: rootFlow)
+			BreedsListView(breedsService: breedsService, rootFlow: rootFlow)
 				.navigationDestination(for: NavigationRoute.self) { route in
 					route.builder()
 				}

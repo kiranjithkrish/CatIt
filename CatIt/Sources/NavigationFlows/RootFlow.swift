@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 protocol RootActions {
 	func didSelectBreed(for breed: Breed)
 }
@@ -20,6 +21,7 @@ final class RootFlow: RootActions {
 		self.coordinator = coordinator
 	}
 	
+	@MainActor
 	func didSelectBreed(for breed: Breed) {
 		let dataStore = DefaultRESTDataStore()
 		let repository = DefaultBreedDetailsRepository(dataSource: dataStore)
