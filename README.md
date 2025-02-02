@@ -53,6 +53,7 @@ CatIt is a SwiftUI-based mobile application that displays cat breeds and images.
 - **Networking:**  
   - A reusable networking layer provides abstraction for testing.  
   - An `Endpoint` type is used to configure URL endpoints; repositories use these endpoints to fetch data via the RESTDataStore.
+  - Only an http get method is handled now. 
 
 - **Dependency Passing:**  
   - No dependency containers are used. All required dependencies are passed explicitly, keeping the architecture simple and portable.
