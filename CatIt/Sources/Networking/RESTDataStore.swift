@@ -7,7 +7,11 @@
 
 import Foundation
 
-
+/// A protocol defining a RESTful data store for making network requests.
+///
+/// This protocol provides methods for creating `URLRequest` instances and
+/// retrieving `Decodable` objects
+/// from API endpoints. It conforms to `Sendable`, making it safe for concurrent access.
 protocol RESTDataStore: AnyObject, Sendable {
 	func request(for endpoint: EndpointConvertible) async throws -> URLRequest
 	func getCodable<Result: Decodable>(at endpoint: CodableEndpoint<Result>) async throws -> Result
@@ -49,23 +53,24 @@ extension DefaultRESTDataStore {
 		}
 	}
 	
+	/// Creates a `URLRequest` from an `EndpointConvertible`. Note only GET methods are handled now. Post and body encoding are not handled.
+	///
+	/// - Parameter endpoint: The API endpoint to create a request for.
+	/// - Returns: A configured `URLRequest` instance.
+	/// - Throws: A `NetworkingError` if request creation fails.
 	private func makeRequest(for endpoint: any EndpointConvertible) throws -> URLRequest {
 		let endpoint = endpoint.endpoint
 		var headers = endpoint.headers ?? [:]
 		try setupAuthorisation(headers: &headers, endpoint: endpoint)
-		
-		//Create url components
 		guard var components = URLComponents(url: endpoint.baseUrl, resolvingAgainstBaseURL: false) else {
 			throw NetworkingError(code: .clientError)
 		}
 		
-		// create the path
 		let urlPath = components.path
 		components.path = "/" + (urlPath + "/" + endpoint.path)
 			.components(separatedBy: "/")
 			.filter { !$0.isEmpty}
 			.joined(separator: "/")
-		// query params
 		let queryItems: [URLQueryItem] = (components.queryItems ?? []) + (endpoint.queryParams ?? [:])
 			.sorted(by: { first, second in
 				first.key < second.key
@@ -74,7 +79,6 @@ extension DefaultRESTDataStore {
 		
 		components.queryItems = queryItems
 		
-		// construct the final url
 		guard let url = components.url else {
 			throw NetworkingError(code: .clientError)
 		}
@@ -91,9 +95,47 @@ extension DefaultRESTDataStore {
 }
 
 private extension DefaultRESTDataStore {
-	func responseDataTask(for endpoint: EndpointConvertible) async throws -> Response {
-		let urlRequest = try makeRequest(for: endpoint)
-		let (data, _) = try await session.data(for: urlRequest)
-		return Response(data: data)
+	
+	/// Performs a network request and handles errors.
+	///
+	/// - Parameter endpoint: The API endpoint to request data from.
+	/// - Returns: A `Response` object containing the fetched data.
+	/// - Throws: A `NetworkingError` if the request fails.
+	func response(at endpoint: EndpointConvertible) async throws -> Response {
+		do {
+			return try await responseDataTask(for: endpoint)
+			
+		} catch let error as NetworkingError {
+			throw error  // Directly throw known `NetworkingError`
+			
+		} catch {
+			throw NetworkingError(code: .generic, error: error) // Wrap unknown errors
+		}
 	}
+	/// Performs a network request and returns a `Response` object.
+	///
+	/// - Parameter endpoint: The API endpoint to request data from.
+	/// - Returns: A `Response` object containing the fetched data.
+	/// - Throws: A `NetworkingError` if the request fails.
+	func responseDataTask(for endpoint: EndpointConvertible) async throws -> Response {
+		
+			// Ensure request creation is successful
+		guard let request = try? makeRequest(for: endpoint) else {
+			throw NetworkingError(code: .generic)
+		}
+		
+		do {
+				// Perform network request
+			let (data, response) = try await session.data(for: request)
+			
+				// Extract HTTP status code
+			let code = NetworkingError.Code((response as? HTTPURLResponse)?.statusCode ?? -1)
+			
+			return Response(code: code, data: data)
+			
+		} catch {
+			throw NetworkingError(code: .generic, error: error)
+		}
+	}
+
 }

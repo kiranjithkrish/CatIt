@@ -28,6 +28,7 @@ enum HTTPMethod: String {
 	case post = "POST"
 }
 
+/// Represents an API endpoint configuration.
 struct Endpoint {
 	
 	enum AuthorizationType: Equatable {
@@ -43,7 +44,7 @@ struct Endpoint {
 	
 	let baseUrl: URL
 	let path: String
-	let parameters: Body
+	let body: Body
 	//Automatic string conversion using the description property.
 	let queryParams: [String: CustomStringConvertible]?
 	let httpMethod: HTTPMethod
@@ -52,17 +53,26 @@ struct Endpoint {
 	
 	init(baseUrl: URL,
 		 path: String,
-		 parameters: Body = [String:Any](),
+		 body: Body = [String:Any](),
 		 queryParams: [String : CustomStringConvertible]? = nil,
 		 httpMethod: HTTPMethod,
 		 headers: [String : String]? = nil,
 		 authorisation: AuthorizationType) {
 		self.baseUrl = baseUrl
 		self.path = path
-		self.parameters = parameters
+		self.body = body
 		self.queryParams = queryParams
 		self.httpMethod = httpMethod
 		self.headers = headers
 		self.authorisation = authorisation
 	}
+}
+
+/// A protocol for types that can be converted into an `Endpoint`.
+protocol EndpointConvertible {
+	var endpoint: Endpoint { get }
+}
+
+extension Endpoint: EndpointConvertible {
+	var endpoint: Endpoint { self }
 }

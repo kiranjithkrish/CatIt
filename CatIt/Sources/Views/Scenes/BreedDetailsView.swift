@@ -16,11 +16,9 @@ struct BreedDetailsView: View {
 		self.breed = breed
 	}
 	
-	private let columns: [GridItem] = [
-		GridItem(.flexible(), spacing: 10),
-		GridItem(.flexible(), spacing: 10),
-		GridItem(.flexible(), spacing: 10)
-	]
+	private var columns: [GridItem] {
+		[GridItem(.adaptive(minimum: 100, maximum: 150), spacing: 10)]
+	}
 	
     var body: some View {
 		VStack(alignment: .leading) {
@@ -65,7 +63,8 @@ struct CatImagesView: View {
 					if let url = URL(string: details.url) {
 						BasicCachedAsyncImage(url: url)
 							.aspectRatio(contentMode: .fill)
-							.frame(width: 120, height: 120)
+							.frame(minWidth: 100, idealWidth: 120, maxWidth: 150,
+									minHeight: 100, idealHeight: 120, maxHeight: 150)
 							.clipped()
 							.onAppear {
 								loadMoreIfNeeded(currentItem: details)
