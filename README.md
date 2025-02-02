@@ -89,6 +89,12 @@ CatIt is a SwiftUI-based mobile application that displays cat breeds and images.
   Introducing a storage layer at the repository level would allow selecting between memory and disk storage, enabling data persistence and offline access.
 - **Further UI Optimizations:**  
   More rigorous testing is needed to ensure the UI behaves well across all device sizes.
+- ** UI Design system:**
+	As the app grows, UI layer can be further devided to hold all the reusable
+	components into a UI Library. This UI library can have design system which 
+	will hold all the basic UI building blocks to bring design consistency 
+	across screens. For eg the color, typography, icon set, spacing system 
+	and showdows.  
 
 ## How to Run
 
