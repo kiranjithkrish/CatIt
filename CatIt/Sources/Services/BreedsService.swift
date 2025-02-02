@@ -25,7 +25,6 @@ final class BreedsService: ObservableObject {
 	
 	@MainActor
 	func loadBreeds() async {
-		print("Current page is", self.currentPage)
 		do {
 			let catImages = try await self.breedsRepo.breeds(page: currentPage, limit: pageLimit)
 			if catImages.isEmpty {

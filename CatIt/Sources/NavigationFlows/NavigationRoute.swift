@@ -27,9 +27,7 @@ final class NavigationCoordinator: ObservableObject {
 	
 	func push(_ viewBuilder: @escaping () -> AnyView) {
 		let route = NavigationRoute(builder: viewBuilder)
-		print("Pushing route with id \(route.id)") // Debug log
 		path.append(route)
-		print(path.count)
 	}
 	
 	func pop() {

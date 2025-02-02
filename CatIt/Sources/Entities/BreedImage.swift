@@ -30,7 +30,6 @@ struct CatImageInfo: Codable, Identifiable, Sendable {
 		self.url = try container.decode(String.self, forKey: .url)
 		self.breeds = try container.decode([Breed].self, forKey: .breeds)
 		self.uuid = UUID()
-		print("id", self.uuid)
 	}
 	
 	var firstBreed: Breed? {

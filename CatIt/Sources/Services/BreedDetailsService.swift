@@ -26,7 +26,6 @@ final class BreedDetailsService: ObservableObject {
 	
 	@MainActor
 	func loadBreedDetails(for breed: String) async {
-		print("Current page is", self.currentPage)
 		do {
 			//async let breed = repo.breedDetail()
 			let images = try await self.breedDetailsRepo.breedImages(page: currentPage, limit: limit, id: breed)

@@ -63,12 +63,9 @@ struct BasicCachedAsyncImage: View {
 		
 		if let cachedResponse = urlCache.cachedResponse(for: request),
 		   let uiImage = UIImage(data: cachedResponse.data) {
-			print("Fetching image from cache")
 			let loadedImage = Image(uiImage: uiImage)
 			return loadedImage
 		}
-		
-		print("Fetching image from network")
 		
 		let configuration = URLSessionConfiguration.default
 		configuration.urlCache = urlCache
@@ -79,7 +76,6 @@ struct BasicCachedAsyncImage: View {
 		urlCache.storeCachedResponse(cachedResponse, for: request)
 		
 		guard let uiImage = UIImage(data: data) else {
-			print("Error: Invalid image data")
 			throw BasicCacheImageError.invalidImageData
 		}
 		return Image(uiImage: uiImage)
