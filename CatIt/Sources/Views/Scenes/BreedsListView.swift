@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct BreedsListView: View {
-	@StateObject private var breedsService: BreedsService
-	let rootFlow: RootFlow
+	@State private var breedsService: BreedsListService
+	let rootFlow: RootActions
 	
-	init(breedsService: BreedsService, rootFlow: RootFlow) {
-		_breedsService = StateObject(wrappedValue: breedsService)
+	init(breedsService: BreedsListService, rootFlow: RootFlow) {
+		_breedsService = State(wrappedValue: breedsService)
 		self.rootFlow = rootFlow
 	}
 	
@@ -47,8 +47,8 @@ struct BreedsListView: View {
 
 struct BreedsList: View {
 	let breedData: [CatImageInfo]
-	let flow: RootFlow
-	let breedsService: BreedsService
+	let flow: RootActions
+	let breedsService: BreedsListService
 	
 	var body: some View {
 		List(breedData) { catInfo in
@@ -58,7 +58,7 @@ struct BreedsList: View {
 				}) {
 					BreedRowView(imageInfo: catInfo)
 						.onAppear {
-							loadMoreIfNeeded(currentItem: catInfo)
+							//loadMoreIfNeeded(currentItem: catInfo)
 						}
 				}
 			}
@@ -69,7 +69,7 @@ struct BreedsList: View {
 		guard let lastItem = breedsService.catImages.last else { return }
 		if lastItem.id == currentItem.id {
 			Task {
-				await breedsService.loadBreeds()
+				//await breedsService.loadBreeds()
 			}
 		}
 	}

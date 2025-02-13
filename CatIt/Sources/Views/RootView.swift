@@ -3,17 +3,14 @@ import SwiftUI
 struct RootView: View {
 	@StateObject private var coordinator: NavigationCoordinator
 	private let rootFlow: RootFlow
-	@StateObject private var breedsService: BreedsService
+	@State private var breedsService: BreedsListService
 	
 	init(coordinator: NavigationCoordinator) {
-		
 		_coordinator = StateObject(wrappedValue: coordinator)
-		
 		self.rootFlow = RootFlow(coordinator: coordinator)
-	
 		let dataStore = DefaultRESTDataStore()
 		let breedsRepo = DefaultBreedsRepository(dataSource: dataStore)
-		_breedsService = StateObject(wrappedValue: BreedsService(breedsRepo: breedsRepo))
+		_breedsService = State(wrappedValue: BreedsListService(breedsRepo: breedsRepo))
 	}
 	
 	var body: some View {

@@ -9,9 +9,10 @@ import Foundation
 
 typealias JSON = [String: Any]
 
-protocol Body {
+protocol Body: Sendable {
 	var json: JSON? { get }
 }
+
 
 extension Body where Self: Encodable {
 	var json: JSON? {
@@ -19,7 +20,7 @@ extension Body where Self: Encodable {
 	}
 }
 
-extension Dictionary: Body where Key == String {
+extension Dictionary: Body where Key == String, Value == Sendable {
 	var json: JSON? { self }
 }
 
@@ -44,7 +45,7 @@ struct Endpoint {
 	
 	let baseUrl: URL
 	let path: String
-	let body: Body
+	let body: Body?
 	//Automatic string conversion using the description property.
 	let queryParams: [String: CustomStringConvertible]?
 	let httpMethod: HTTPMethod
@@ -53,7 +54,7 @@ struct Endpoint {
 	
 	init(baseUrl: URL,
 		 path: String,
-		 body: Body = [String:Any](),
+		 body: Body? = nil,
 		 queryParams: [String : CustomStringConvertible]? = nil,
 		 httpMethod: HTTPMethod,
 		 headers: [String : String]? = nil,

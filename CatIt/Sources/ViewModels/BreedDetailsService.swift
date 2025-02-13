@@ -6,18 +6,18 @@
 //
 
 
-import SwiftUI
+import Foundation
 
-
-final class BreedDetailsService: ObservableObject {
+@Observable
+final class BreedDetailsService {
 	private let breedDetailsRepo: BreedDetailsRepository
 	
 	private var currentPage = 0
 	private let limit = 20
 	private var hasMore = true
 	
-	@Published var detailsError: Error?
-	@Published var breedImages: [CatImageInfo] = []
+	var detailsError: Error?
+	var breedImages: [CatImageInfo] = []
 	
 	
 	init(breedDetailsRepo: BreedDetailsRepository) {

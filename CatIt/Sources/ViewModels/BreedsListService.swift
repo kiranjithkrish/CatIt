@@ -7,8 +7,8 @@
 
 import Foundation
 
-
-final class BreedsService: ObservableObject {
+@Observable
+final class BreedsListService {
 	private let breedsRepo: BreedsRepository
 	
 	init(breedsRepo: BreedsRepository) {
@@ -18,9 +18,9 @@ final class BreedsService: ObservableObject {
 	private var currentPage = 0
 	private let pageLimit = 20
 	
-	@Published var error: Error?
-	@Published var catImages: [CatImageInfo] = [] 
-	@Published var isLoading = false
+	var error: Error?
+	var catImages: [CatImageInfo] = [] 
+	var isLoading = false
 	private var hasMore = true
 	
 	@MainActor

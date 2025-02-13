@@ -23,9 +23,25 @@ extension RESTDataStore {
 	}
 }
 
-actor DefaultRESTDataStore: RESTDataStore {
+final class DefaultRESTDataStore: RESTDataStore {
 	
 	private let session: SessionAdapter
+	
+	internal actor RequestState {
+		var cache: [URLRequest: Task<Response, Error>] = [:]
+		
+		func clear(for request: URLRequest) async {
+			cache[request] = nil
+		}
+		
+		func set(_ task: Task<Response, Error>, for request: URLRequest) async {
+			cache[request] = task
+		}
+		
+		func get(for request: URLRequest) async -> Task<Response, Error>? {
+			cache[request]
+		}
+	}
 	
 	init(session: URLSession = .shared) {
 		self.session = session
@@ -106,10 +122,10 @@ private extension DefaultRESTDataStore {
 			return try await responseDataTask(for: endpoint)
 			
 		} catch let error as NetworkingError {
-			throw error  // Directly throw known `NetworkingError`
+			throw error 
 			
 		} catch {
-			throw NetworkingError(code: .generic, error: error) // Wrap unknown errors
+			throw NetworkingError(code: .generic, error: error)
 		}
 	}
 	/// Performs a network request and returns a `Response` object.
@@ -118,17 +134,13 @@ private extension DefaultRESTDataStore {
 	/// - Returns: A `Response` object containing the fetched data.
 	/// - Throws: A `NetworkingError` if the request fails.
 	func responseDataTask(for endpoint: EndpointConvertible) async throws -> Response {
-		
-			// Ensure request creation is successful
 		guard let request = try? makeRequest(for: endpoint) else {
 			throw NetworkingError(code: .generic)
 		}
 		
 		do {
-				// Perform network request
 			let (data, response) = try await session.data(for: request)
-			
-				// Extract HTTP status code
+			// What about the response? This is a generic code which will fail if the endpoint has a modified design
 			let code = NetworkingError.Code((response as? HTTPURLResponse)?.statusCode ?? -1)
 			
 			return Response(code: code, data: data)

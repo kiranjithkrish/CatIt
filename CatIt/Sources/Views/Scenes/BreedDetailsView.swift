@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct BreedDetailsView: View {
-	@StateObject private var detailsService: BreedDetailsService
+	@State private var detailsService: BreedDetailsService
 	let breed: Breed
 	
 	init(details: BreedDetailsService, breed: Breed) {
-		_detailsService = StateObject(wrappedValue: details)
+		_detailsService = State(wrappedValue: details)
 		self.breed = breed
 	}
 	
@@ -61,20 +61,19 @@ struct CatImagesView: View {
 			LazyVGrid(columns: columns) {
 				ForEach(images) { details in
 					if let url = URL(string: details.url) {
-						BasicCachedAsyncImage(url: url)
+						AsyncImage(url: url)
 							.aspectRatio(contentMode: .fill)
-							.frame(minWidth: 100, idealWidth: 120, maxWidth: 150,
-									minHeight: 100, idealHeight: 120, maxHeight: 150)
+							.frame(width: 120, height: 120)
 							.clipped()
 							.onAppear {
 								loadMoreIfNeeded(currentItem: details)
 							}
 					}
 				}
-				
 			}
 		}
 	}
+		
 	
 	private func loadMoreIfNeeded(currentItem: CatImageInfo) {
 		guard let lastItem = images.last else { return }
@@ -85,6 +84,7 @@ struct CatImagesView: View {
 		}
 	}
 }
+
 
 struct ErrorToastView: View {
 	let message: String

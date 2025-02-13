@@ -22,7 +22,7 @@ struct DefaultBreedDetailsRepository: BreedDetailsRepository {
 				endpoint: Endpoint(
 					baseUrl: URL(string: "https://api.thecatapi.com/")!,
 					path:  "v1/images/search",
-					queryParams: ["page":page, "limit": limit, "has_breeds": true, "breed_id": id], httpMethod: .get,
+					queryParams: ["page":page, "limit": limit, "has_breeds": true, "breed_id": id, "size" : "small"], httpMethod: .get,
 					authorisation: .custom(apiKey: "x-api-key", value: "live_WCeRxR4cQXW5mKDvMPB9pHNoBYDoyix65jFLHGgQc5we6JpPYLVC3gWz0vv0IK89")
 				)
 			)
