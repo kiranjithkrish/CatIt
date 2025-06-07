@@ -32,10 +32,10 @@ struct DefaultBreedsRepository: BreedsRepository {
 		self.dataSource = dataSource
 	}
 	
-	func breeds(page: Int, limit: Int) async throws -> [CatImageInfo] {
-		let endpoint = Endpoints.breeds(page: page, limit: limit)
-		let breeds = try await dataSource.getCodable<[Breed]>(at: endpoint)
-		return breeds
-	}
+        func breeds(page: Int, limit: Int) async throws -> [CatImageInfo] {
+                let endpoint = Endpoints.breeds(page: page, limit: limit)
+                let images = try await dataSource.getCodable<[CatImageInfo]>(at: endpoint)
+                return images
+        }
 	
 }

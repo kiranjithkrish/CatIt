@@ -33,9 +33,9 @@ struct DefaultBreedDetailsRepository: BreedDetailsRepository {
 		self.dataSource = dataSource
 	}
 	
-	func breedImages(page: Int, limit: Int, id breedId: String) async throws -> [CatImageInfo] {
-		let endpoint = Endpoints.breedImages(page: page, limit: limit, id: breedId)
-		let breeds = try await dataSource.getCodable<[BreedImage]>(at: endpoint)
-		return breeds
-	}
+        func breedImages(page: Int, limit: Int, id breedId: String) async throws -> [CatImageInfo] {
+                let endpoint = Endpoints.breedImages(page: page, limit: limit, id: breedId)
+                let images = try await dataSource.getCodable<[CatImageInfo]>(at: endpoint)
+                return images
+        }
 }

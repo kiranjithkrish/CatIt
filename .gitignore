@@ -18,3 +18,4 @@ DerivedData/
 *.dSYM
 # macOS Files
 .DS_Store
+.build/

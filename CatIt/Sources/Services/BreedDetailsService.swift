@@ -24,10 +24,11 @@ final class BreedDetailsService: ObservableObject {
 		self.breedDetailsRepo = breedDetailsRepo
 	}
 	
-	@MainActor
-	func loadBreedDetails(for breed: String) async {
-		do {
-			//async let breed = repo.breedDetail()
+        @MainActor
+        func loadBreedDetails(for breed: String) async {
+                guard hasMore else { return }
+                do {
+                        //async let breed = repo.breedDetail()
 			let images = try await self.breedDetailsRepo.breedImages(page: currentPage, limit: limit, id: breed)
 			if images.isEmpty {
 				hasMore = false

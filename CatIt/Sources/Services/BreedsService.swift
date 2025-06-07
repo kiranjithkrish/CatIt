@@ -23,10 +23,11 @@ final class BreedsService: ObservableObject {
 	@Published var isLoading = false
 	private var hasMore = true
 	
-	@MainActor
-	func loadBreeds() async {
-		do {
-			let catImages = try await self.breedsRepo.breeds(page: currentPage, limit: pageLimit)
+        @MainActor
+        func loadBreeds() async {
+                guard hasMore else { return }
+                do {
+                        let catImages = try await self.breedsRepo.breeds(page: currentPage, limit: pageLimit)
 			if catImages.isEmpty {
 				hasMore = false
 			} else {
