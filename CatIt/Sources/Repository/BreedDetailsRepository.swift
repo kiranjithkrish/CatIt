@@ -6,17 +6,16 @@
 //
 
 import Foundation
+import NetworkKit
 
 protocol BreedDetailsRepository: Sendable {
 	func breedImages(page: Int, limit: Int, id: String) async throws -> [CatImageInfo]
 }
 
-
 struct DefaultBreedDetailsRepository: BreedDetailsRepository {
 	let dataSource: RESTDataStore
 	
 	private enum Endpoints {
-		
 		static func breedImages(page: Int, limit: Int, id: String) -> CodableEndpoint<[CatImageInfo]> {
 			CodableEndpoint(
 				endpoint: Endpoint(

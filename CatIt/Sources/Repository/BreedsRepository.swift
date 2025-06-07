@@ -6,9 +6,18 @@
 //
 
 import Foundation
+import NetworkKit
 
 protocol BreedsRepository: Sendable {
 	func breeds(page: Int, limit: Int) async throws -> [CatImageInfo]
+}
+
+actor ASingleton {
+    static let shared = ASingleton()
+    private(set) var someProperty: String
+    private init() {
+        self.someProperty = "someProperty"
+    }
 }
 
 

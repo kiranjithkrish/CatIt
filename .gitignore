@@ -1,5 +1,5 @@
 #Ignore .xcodeproj initially
-CatIt.xcodeproj/
+#CatIt.xcodeproj/
 # Build and Derived Data
 build/
 DerivedData/

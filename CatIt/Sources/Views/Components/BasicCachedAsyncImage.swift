@@ -79,11 +79,8 @@ struct BasicCachedAsyncImage: View {
 			throw BasicCacheImageError.invalidImageData
 		}
 		return Image(uiImage: uiImage)
-		
-		
 	}
 }
-
 
 enum BasicCacheImageError: Error {
 	case invalidURL

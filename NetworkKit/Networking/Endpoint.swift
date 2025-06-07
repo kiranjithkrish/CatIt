@@ -30,7 +30,7 @@ enum HTTPMethod: String {
 }
 
 /// Represents an API endpoint configuration.
-struct Endpoint {
+public struct Endpoint {
 	
 	enum AuthorizationType: Equatable {
 		case none
@@ -70,10 +70,10 @@ struct Endpoint {
 }
 
 /// A protocol for types that can be converted into an `Endpoint`.
-protocol EndpointConvertible {
+public protocol EndpointConvertible {
 	var endpoint: Endpoint { get }
 }
 
 extension Endpoint: EndpointConvertible {
-	var endpoint: Endpoint { self }
+	public var endpoint: Endpoint { self }
 }

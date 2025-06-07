@@ -12,7 +12,7 @@ import Foundation
 /// This protocol provides methods for creating `URLRequest` instances and
 /// retrieving `Decodable` objects
 /// from API endpoints. It conforms to `Sendable`, making it safe for concurrent access.
-protocol RESTDataStore: AnyObject, Sendable {
+public protocol RESTDataStore: AnyObject, Sendable {
 	func request(for endpoint: EndpointConvertible) async throws -> URLRequest
 	func getCodable<Result: Decodable>(at endpoint: CodableEndpoint<Result>) async throws -> Result
 }

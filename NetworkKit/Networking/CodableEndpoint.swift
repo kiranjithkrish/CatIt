@@ -24,7 +24,7 @@ import Foundation
 ///   - endpoint: The `Endpoint` configuration for the network request.
 public struct CodableEndpoint<Entity: Decodable>: EndpointConvertible {
 	let decoder: JSONDecoder
-	let endpoint: Endpoint
+	public let endpoint: Endpoint
 	
 	init(decoder: JSONDecoder = .init(),
 		 endpoint: Endpoint) {
